@@ -4,7 +4,6 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 import { Hero } from './hero';
-import { HEROES } from './mock-heroes';
 import { MessageService } from './message.service';
 
 @Injectable({
@@ -13,10 +12,6 @@ import { MessageService } from './message.service';
 export class HeroService {
 
   private heroesUrl = 'api/heroes';
-
-  const httpOptions = {
-    headers : new HttpHeaders({ 'Content-Type': 'application/json' })
-  };
 
   getHero(id: number) {
     const url = `${this.heroesUrl}/${id}`;
@@ -35,6 +30,9 @@ export class HeroService {
   }
 
   updateHero(hero: Hero): Observable<any> {
+    const httpOptions = {
+      headers : new HttpHeaders({ 'Content-Type': 'application/json' })
+    };
     return this.http.put(this.heroesUrl, hero, httpOptions).pipe(
       tap(_ => this.log(`updated hero id=${hero.id}`)),
       catchError(this.handleError<any>('updateHero'))
